@@ -1,21 +1,41 @@
-# Radar de Licitações
+# Licitações — Radar + Assistente de Lances
 
-Busca oportunidades de licitação (pregões e outras modalidades) com **propostas
-em aberto**, a partir dos **dados abertos oficiais** do
-[PNCP – Portal Nacional de Contratações Públicas](https://pncp.gov.br).
+Módulo web para o **fornecedor** de licitações públicas. Tem duas telas:
 
-Feito para o **fornecedor** encontrar e acompanhar oportunidades — o app apenas
-**consulta** dados públicos. Ele **não** interage com salas de disputa nem
-automatiza lances.
+1. **📡 Radar de Licitações** — busca oportunidades com **propostas em aberto**
+   a partir dos **dados abertos oficiais** do
+   [PNCP – Portal Nacional de Contratações Públicas](https://pncp.gov.br).
+2. **🎯 Assistente de Lances** — copiloto que calcula o próximo lance ideal e
+   **trava no seu preço mínimo**, para você decidir mais rápido.
+
+## Escopo e limites (importante)
+
+Este app **apenas consulta dados abertos** e **calcula números localmente**. Ele
+**não** se conecta às salas de disputa, **não** captura tráfego de nenhuma
+plataforma e **não** envia lances. No Assistente, quem informa o lance atual e
+quem envia o lance no Compras.gov.br é sempre **o operador** — o app é um apoio à
+decisão, não um robô de envio automático.
 
 ## Recursos
 
+**Radar**
 - 🔎 Busca por modalidade, UF e prazo de propostas
 - 🔤 Filtro por palavra-chave (sobre o objeto da compra)
+- 🏷️ Filtro por sistema de origem (padrão: somente Compras.gov.br)
 - 📊 Painel de resumo (total, UFs, prazos próximos, valor estimado)
 - ⏰ Destaque para oportunidades encerrando em breve
 - ↗ Link direto para o sistema de origem de cada licitação
 - 📄 Paginação sobre o resultado oficial
+
+**Assistente de Lances**
+- 💰 Cadastro financeiro → calcula custo, **preço mínimo** e preço recomendado
+- ♟️ Estratégias: cobrir pelo mínimo, decremento fixo/percentual/por faixa
+- ⚡ Recálculo instantâneo do próximo lance ao informar o melhor lance atual
+- 🔒 **Trava financeira**: nunca recomenda abaixo do preço mínimo (“NÃO COBRIR”)
+- 🚦 Indicadores de margem (verde/amarelo/vermelho/cinza)
+- 📋 Botão para copiar o valor recomendado (o envio no portal é **manual**)
+- 🧾 Histórico e auditoria das recomendações
+- 📊 Dashboard de margem, economia e lucro estimado
 
 ## Tecnologia
 
