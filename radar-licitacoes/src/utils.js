@@ -28,3 +28,30 @@ export function diasRestantes(iso) {
   const ms = fim.getTime() - Date.now()
   return Math.ceil(ms / (1000 * 60 * 60 * 24))
 }
+
+// Host (dominio) do link do sistema de origem da contratacao, em minusculas.
+export function hostDoItem(item) {
+  const link = item?.linkSistemaOrigem
+  if (!link) return null
+  try {
+    return new URL(link).host.toLowerCase()
+  } catch {
+    return null
+  }
+}
+
+// Identifica se a contratacao tem origem no Compras.gov.br (plataforma federal,
+// operada pelo SERPRO). Match preciso pelos dominios do Compras.gov.br —
+// cuidado para NAO confundir com portais estaduais que contem "compras" no nome
+// (ex.: compras.rs.gov.br, compras.mg.gov.br).
+export function ehComprasGov(item) {
+  const host = hostDoItem(item)
+  if (!host) return false
+  return (
+    host === 'cnetmobile.estaleiro.serpro.gov.br' || // Compras.gov.br atual (Comprasnet-web)
+    host === 'compras.gov.br' ||
+    host === 'www.compras.gov.br' ||
+    host.endsWith('.compras.gov.br') || // subdominios federais (ex.: catalogo.compras.gov.br)
+    host.endsWith('comprasnet.gov.br') // Comprasnet legado
+  )
+}

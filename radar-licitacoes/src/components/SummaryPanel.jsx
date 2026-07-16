@@ -1,6 +1,8 @@
 import { formatarValor } from '../utils.js'
 
 // Painel de resumo das oportunidades encontradas.
+// `registros` ja vem filtrado (sistema + palavra-chave); `totalRegistros` e o
+// total do PNCP para a busca, considerando TODAS as fontes.
 export default function SummaryPanel({ registros, totalRegistros }) {
   const total = registros.length
   const valorSomado = registros.reduce(
@@ -17,7 +19,7 @@ export default function SummaryPanel({ registros, totalRegistros }) {
 
   const cards = [
     { rotulo: 'Nesta página', valor: total },
-    { rotulo: 'Total no país', valor: totalRegistros.toLocaleString('pt-BR') },
+    { rotulo: 'Total PNCP (todas as fontes)', valor: totalRegistros.toLocaleString('pt-BR') },
     { rotulo: 'UFs nesta página', valor: ufs.size },
     { rotulo: 'Encerrando em 7 dias', valor: encerrandoEm7, alerta: encerrandoEm7 > 0 },
     { rotulo: 'Valor estimado (página)', valor: formatarValor(valorSomado) },

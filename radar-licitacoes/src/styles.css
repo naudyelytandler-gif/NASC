@@ -116,6 +116,7 @@ body {
 .summary-card__rotulo { font-size: 0.78rem; color: var(--muted); }
 
 .aviso-filtro { color: var(--muted); font-size: 0.88rem; margin: 0 0 12px; }
+.aviso-filtro__obs { font-style: italic; opacity: 0.85; }
 
 /* Lista de cartoes */
 .lista {

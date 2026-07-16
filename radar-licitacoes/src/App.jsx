@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react'
 import { MODALIDADES, UFS } from './constants.js'
 import { buscarContratacoes, toApiDate } from './api.js'
+import { ehComprasGov } from './utils.js'
 import SummaryPanel from './components/SummaryPanel.jsx'
 import ResultCard from './components/ResultCard.jsx'
 
@@ -20,6 +21,9 @@ export default function App() {
   const [ate, setAte] = useState(dataPadrao())
   // Filtro por palavra-chave (aplicado no cliente sobre o objeto da compra).
   const [termo, setTermo] = useState('')
+  // Filtro por sistema de origem. Padrao: somente Compras.gov.br, pois e onde o
+  // fornecedor participa. Aplicado no cliente, pela origem de cada contratacao.
+  const [sistema, setSistema] = useState('compras') // 'compras' | 'todos' | 'outros'
 
   const [pagina, setPagina] = useState(1)
   const [resultado, setResultado] = useState(null) // { data, totalRegistros, totalPaginas }
@@ -53,13 +57,16 @@ export default function App() {
     consultar(1)
   }
 
-  // Filtro por palavra-chave aplicado sobre os registros da pagina atual.
+  // Filtros aplicados no cliente sobre os registros da pagina atual:
+  // 1) sistema de origem (Compras.gov.br / outros / todos); 2) palavra-chave.
   const registrosFiltrados = useMemo(() => {
-    const lista = resultado?.data ?? []
+    let lista = resultado?.data ?? []
+    if (sistema === 'compras') lista = lista.filter(ehComprasGov)
+    else if (sistema === 'outros') lista = lista.filter((r) => !ehComprasGov(r))
     const t = termo.trim().toLowerCase()
-    if (!t) return lista
-    return lista.filter((r) => (r.objetoCompra || '').toLowerCase().includes(t))
-  }, [resultado, termo])
+    if (t) lista = lista.filter((r) => (r.objetoCompra || '').toLowerCase().includes(t))
+    return lista
+  }, [resultado, termo, sistema])
 
   const totalPaginas = resultado?.totalPaginas ?? 0
 
@@ -94,6 +101,15 @@ export default function App() {
         </label>
 
         <label>
+          Sistema
+          <select value={sistema} onChange={(e) => setSistema(e.target.value)}>
+            <option value="compras">Somente Compras.gov.br</option>
+            <option value="todos">Todos os sistemas</option>
+            <option value="outros">Somente outros</option>
+          </select>
+        </label>
+
+        <label>
           Propostas até
           <input type="date" value={ate} onChange={(e) => setAte(e.target.value)} />
         </label>
@@ -119,10 +135,18 @@ export default function App() {
         <>
           <SummaryPanel registros={registrosFiltrados} totalRegistros={resultado.totalRegistros} />
 
-          {termo.trim() && (
+          {(sistema !== 'todos' || termo.trim()) && (
             <p className="aviso-filtro">
-              Filtrando por “{termo.trim()}” nesta página: {registrosFiltrados.length} de{' '}
-              {resultado.data.length} resultados.
+              Mostrando <strong>{registrosFiltrados.length}</strong> de{' '}
+              {resultado.data.length} itens carregados nesta página
+              {sistema === 'compras' && ' — somente Compras.gov.br'}
+              {sistema === 'outros' && ' — somente outros sistemas'}
+              {termo.trim() && ` — contendo “${termo.trim()}”`}.
+              {sistema === 'compras' && (
+                <span className="aviso-filtro__obs">
+                  {' '}Itens sem link de origem identificável não entram neste filtro.
+                </span>
+              )}
             </p>
           )}
 
