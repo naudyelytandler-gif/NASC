@@ -1,0 +1,20 @@
+{
+  "name": "radar-licitacoes",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Radar de Licitacoes - busca oportunidades de pregao a partir dos dados abertos oficiais do PNCP (Compras.gov.br).",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "vite": "^6.0.7"
+  }
+}
